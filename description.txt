@@ -1,0 +1,1 @@
+Seamlessly overrides night time minimum sunlight level for all players to provide more visibility outdoors without affecting cave lighting or gameplay.
