@@ -2,9 +2,9 @@
 local SUNLIGHT = 15
 
 -- mod config
-local night_light = 4
-local dawn = 0.2049
-local dusk = 0.7882
+local night_light = tonumber(minetest.settings:get("bright_night_night_light")) or 4
+local dawn = tonumber(minetest.settings:get("bright_night_dawn")) or 0.2049
+local dusk = tonumber(minetest.settings:get("bright_night_dusk")) or 0.7882
 
 -- mod active values
 local night_mode = false
