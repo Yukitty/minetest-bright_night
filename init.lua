@@ -2,53 +2,12 @@
 local SUNLIGHT = 15
 
 -- mod config
-local night_light = tonumber(minetest.settings:get("bright_night_night_light")) or 4
-local dawn = tonumber(minetest.settings:get("bright_night_dawn")) or 0.2049
-local dusk = tonumber(minetest.settings:get("bright_night_dusk")) or 0.7882
+local night_light = math.max(math.min(tonumber(minetest.settings:get("bright_night_light")) or 4, 15), 3)
+local dawn = ({0.1979, 0.2049, 0.2118, 0.2170, 0.2216, 0.2259, 0.2299, 0.2339, 0.2374, 0.2409, 0.2443, 0.2497, 0.25})[night_light-2]
+local dusk = ({0.7952, 0.7882, 0.7831, 0.7784, 0.7741, 0.7702, 0.7662, 0.7626, 0.7592, 0.7557, 0.7503, 0.7402, 0.74})[night_light-2]
 
 -- mod active values
 local night_mode = false
-
--- If you change night_light above, use this command
--- to calculate new seamless dawn and dusk times.
---[[
-minetest.register_chatcommand("calc_nightlight", {
-description = "Calculate appropriate time settings for bright_night mod.",
-func=function(name)
-	local player = minetest.get_player_by_name(name)
-	if not player then
-		return false, "Must be run by an in-game player."
-	end
-
-	local pos = player:get_pos()
-	pos.x = math.floor(pos.x)
-	pos.y = math.floor(pos.y + 1)
-	pos.z = math.floor(pos.z)
-
-	local time = 0.5
-	local light = minetest.get_node_light(pos, time)
-	if light ~= SUNLIGHT then
-		return false, "Please stand in open sunlight."
-	end
-
-	time = 0.26
-	while light >= night_light and time > 0 do
-		time = time - 0.0001
-		light = minetest.get_node_light(pos, time)
-	end
-	dawn = time
-
-	time = 0.74
-	light = 15
-	while light > night_light and time < 1 do
-		time = time + 0.0001
-		light = minetest.get_node_light(pos, time)
-	end
-	dusk = time
-
-	return true, string.format('Found dawn and dusk for %d as %.4f and %.4f', night_light, dawn, dusk)
-end})
-]]
 
 local function set_night(player)
 	player:override_day_night_ratio(night_light / SUNLIGHT)
